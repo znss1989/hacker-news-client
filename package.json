@@ -1,5 +1,5 @@
 {
-  "name": "Hacker news client",
+  "name": "hacker-news-client",
   "version": "1.0.0",
   "description": "Client site that loads threads from Hacker News official API",
   "main": "index.js",

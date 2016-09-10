@@ -1,3 +1,4 @@
 module.exports = {
-    
+    APP_STORE_TOPS: "APP_STORE_TOPS",
+    APP_LOAD_MORE_TOPS: "APP_LOAD_MORE_TOPS",
 }
