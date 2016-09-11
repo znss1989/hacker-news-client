@@ -35,6 +35,7 @@ var AppAPI = {
                             // Show info
                         });
                 }
+                // Switch to Promise methods later
                 var timer = setInterval(function() {
                     if (storyCount == 0) {
                         payload.items = initTopStories;
@@ -45,7 +46,7 @@ var AppAPI = {
                 }, 200);
             })
             .fail(function() {
-                // 
+                // Show info
             });        
     },
     loadMoreTops: function(callback) {

@@ -23,6 +23,11 @@ AppDispatcher.register(function(action) {
         // Respond to APP_LOAD_MORE_TOPS action:
         case AppConstants.APP_LOAD_MORE_TOPS:
             AppStore.loadMoreTops()
+            break;
+        // Respond to APP_REFRESH_TOPS action:
+        case AppConstants.APP_REFRESH_TOPS:
+            AppStore.refreshTops();
+            break;
 
         // Respond to ...
         default:

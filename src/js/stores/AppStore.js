@@ -22,6 +22,10 @@ var AppStore = assign({}, EventEmitter.prototype, {
         };
         _topStories = _topStories.concat(stories);
     },
+    refreshTops: function() {
+        _topStories = [];
+        AppAPI.getTops();
+    },
 
     // Default methods
     emitChange: function() {

@@ -14,7 +14,12 @@ var AppActions = {
             actionType: AppConstants.APP_LOAD_MORE_TOPS,
             callback: callback
         };
-    }
+    },
+    refreshTopStories: function() {
+        var action = {
+            actionType: AppConstants.APP_REFRESH_TOPS,
+        }
+    },
 };
 
 module.exports = AppActions;

@@ -19829,12 +19829,17 @@ var AppActions = {
             actionType: AppConstants.APP_LOAD_MORE_TOPS,
             callback: callback
         };
+    },
+    refreshTopStories: function refreshTopStories() {
+        var action = {
+            actionType: AppConstants.APP_REFRESH_TOPS
+        };
     }
 };
 
 module.exports = AppActions;
 
-},{"../constants/AppConstants":170,"../dispatcher/AppDispatcher":171}],165:[function(require,module,exports){
+},{"../constants/AppConstants":171,"../dispatcher/AppDispatcher":172}],165:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -19862,7 +19867,6 @@ var App = React.createClass({
     // Add change listerns to stores and get Ajax response
     componentDidMount: function componentDidMount() {
         AppStore.addChangeListener(this._onChange);
-        AppAPI.getTops(); // First get top story ids and then load initial top stories
     },
     // Remove change listeners from stores
     componentWillUnmount: function componentWillUnmount() {
@@ -19883,7 +19887,7 @@ var App = React.createClass({
 
 module.exports = App;
 
-},{"../actions/AppActions":164,"../dispatcher/AppDispatcher":171,"../stores/AppStore":173,"../utils/AppAPI":174,"./AppBody.react.jsx":166,"./AppHeader.react.jsx":167,"react":163}],166:[function(require,module,exports){
+},{"../actions/AppActions":164,"../dispatcher/AppDispatcher":172,"../stores/AppStore":174,"../utils/AppAPI":175,"./AppBody.react.jsx":166,"./AppHeader.react.jsx":167,"react":163}],166:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -19892,27 +19896,54 @@ var AppActions = require('../actions/AppActions');
 var AppStore = require('../stores/AppStore');
 
 var TopStories = require('./TopStories.react.jsx');
+var NewStories = require('./NewStories.react.jsx');
 
 var AppBody = React.createClass({
     displayName: 'AppBody',
 
+    getInitialState: function getInitialState() {
+        return {
+            showNew: false
+        };
+    },
+    onShowTop: function onShowTop(evt) {
+        this.setState({
+            showNew: false
+        });
+        // Refresh data for news when showing tops
+    },
+    onShowNew: function onShowNew(evt) {
+        this.setState({
+            showNew: true
+        });
+    },
     render: function render() {
         return React.createElement(
             'div',
             null,
             React.createElement(
-                'p',
+                'button',
+                { onClick: this.onShowTop },
+                'Tops'
+            ),
+            React.createElement(
+                'button',
+                { onClick: this.onShowNew },
+                'Newest'
+            ),
+            React.createElement(
+                'span',
                 null,
                 'Content goes here...'
             ),
-            React.createElement(TopStories, { topStories: this.props.topStories })
+            this.state.showNew ? React.createElement(NewStories, null) : React.createElement(TopStories, { topStories: this.props.topStories })
         );
     }
 });
 
 module.exports = AppBody;
 
-},{"../actions/AppActions":164,"../stores/AppStore":173,"./TopStories.react.jsx":169,"react":163}],167:[function(require,module,exports){
+},{"../actions/AppActions":164,"../stores/AppStore":174,"./NewStories.react.jsx":168,"./TopStories.react.jsx":170,"react":163}],167:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -19938,7 +19969,28 @@ var AppHeader = React.createClass({
 
 module.exports = AppHeader;
 
-},{"../actions/AppActions":164,"../stores/AppStore":173,"react":163}],168:[function(require,module,exports){
+},{"../actions/AppActions":164,"../stores/AppStore":174,"react":163}],168:[function(require,module,exports){
+'use strict';
+
+var React = require('react');
+
+var AppAPI = require('../utils/AppAPI');
+var AppActions = require('../actions/AppActions');
+var AppStore = require('../stores/AppStore');
+
+var Story = require('../components/Story.react.jsx');
+
+var NewStories = React.createClass({
+    displayName: 'NewStories',
+
+    render: function render() {
+        return React.createElement('div', null);
+    }
+});
+
+module.exports = NewStories;
+
+},{"../actions/AppActions":164,"../components/Story.react.jsx":169,"../stores/AppStore":174,"../utils/AppAPI":175,"react":163}],169:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -19964,17 +20016,22 @@ var Story = React.createClass({
         };
     },
     render: function render() {
+        var datetime = new Date(this.state.time * 1000);
         return React.createElement(
             'div',
             null,
             React.createElement(
                 'h6',
                 { className: this.state.deleted ? "item-title deleted" : "item-title" },
-                this.state.title,
+                this.state.title + " ",
                 React.createElement(
                     'a',
                     { href: this.state.url },
-                    React.createElement('img', { src: './img/link.png', alt: 'link' })
+                    React.createElement(
+                        'i',
+                        { className: 'iconfont' },
+                        ''
+                    )
                 )
             ),
             React.createElement(
@@ -19988,7 +20045,7 @@ var Story = React.createClass({
                     this.state.by
                 ),
                 ', at ',
-                this.state.time
+                datetime.toLocaleDateString() + " " + datetime.toLocaleTimeString()
             ),
             React.createElement(
                 'p',
@@ -20007,7 +20064,7 @@ var Story = React.createClass({
 
 module.exports = Story;
 
-},{"../actions/AppActions":164,"../stores/AppStore":173,"../utils/AppAPI":174,"react":163}],169:[function(require,module,exports){
+},{"../actions/AppActions":164,"../stores/AppStore":174,"../utils/AppAPI":175,"react":163}],170:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -20044,10 +20101,14 @@ var TopStories = React.createClass({
         $(window).off('scroll', 'window');
     },
     componentDidMount: function componentDidMount() {
+        AppAPI.getTops(); // First get top story ids and then load initial top stories
         this.onScrollToBottom();
     },
-    componentUnMount: function componentUnMount() {
+    componentWillUnMount: function componentWillUnMount() {
+        console.log("top unmounting...");
         this.offScrollToBottom();
+        // Refresh data for tops when showing news
+        AppActions.refreshTopStories();
     },
     shouldComponentUpdata: function shouldComponentUpdata() {},
     componentWillUpdata: function componentWillUpdata() {},
@@ -20066,15 +20127,16 @@ var TopStories = React.createClass({
 
 module.exports = TopStories;
 
-},{"../actions/AppActions":164,"../components/Story.react.jsx":168,"../stores/AppStore":173,"../utils/AppAPI":174,"react":163}],170:[function(require,module,exports){
+},{"../actions/AppActions":164,"../components/Story.react.jsx":169,"../stores/AppStore":174,"../utils/AppAPI":175,"react":163}],171:[function(require,module,exports){
 "use strict";
 
 module.exports = {
     APP_STORE_TOPS: "APP_STORE_TOPS",
-    APP_LOAD_MORE_TOPS: "APP_LOAD_MORE_TOPS"
+    APP_LOAD_MORE_TOPS: "APP_LOAD_MORE_TOPS",
+    APP_REFRESH_TOPS: "APP_REFRESH_TOPS"
 };
 
-},{}],171:[function(require,module,exports){
+},{}],172:[function(require,module,exports){
 'use strict';
 
 var Dispatcher = require('flux').Dispatcher;
@@ -20102,6 +20164,11 @@ AppDispatcher.register(function (action) {
         // Respond to APP_LOAD_MORE_TOPS action:
         case AppConstants.APP_LOAD_MORE_TOPS:
             AppStore.loadMoreTops();
+            break;
+        // Respond to APP_REFRESH_TOPS action:
+        case AppConstants.APP_REFRESH_TOPS:
+            AppStore.refreshTops();
+            break;
 
         // Respond to ...
         default:
@@ -20112,7 +20179,7 @@ AppDispatcher.register(function (action) {
 
 module.exports = AppDispatcher;
 
-},{"../constants/AppConstants":170,"../stores/AppStore":173,"flux":3,"object-assign":6}],172:[function(require,module,exports){
+},{"../constants/AppConstants":171,"../stores/AppStore":174,"flux":3,"object-assign":6}],173:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -20123,7 +20190,7 @@ var App = require('./components/App.react.jsx');
 
 ReactDOM.render(React.createElement(App, null), document.getElementById('app'));
 
-},{"./components/App.react.jsx":165,"./utils/AppAPI.js":174,"react":163,"react-dom":7}],173:[function(require,module,exports){
+},{"./components/App.react.jsx":165,"./utils/AppAPI.js":175,"react":163,"react-dom":7}],174:[function(require,module,exports){
 'use strict';
 
 var AppDispatcher = require('../dispatcher/AppDispatcher');
@@ -20150,6 +20217,10 @@ var AppStore = assign({}, EventEmitter.prototype, {
         };
         _topStories = _topStories.concat(stories);
     },
+    refreshTops: function refreshTops() {
+        _topStories = [];
+        AppAPI.getTops();
+    },
 
     // Default methods
     emitChange: function emitChange() {
@@ -20165,7 +20236,7 @@ var AppStore = assign({}, EventEmitter.prototype, {
 
 module.exports = AppStore;
 
-},{"../constants/AppConstants":170,"../dispatcher/AppDispatcher":171,"../utils/AppAPI":174,"events":1,"object-assign":6}],174:[function(require,module,exports){
+},{"../constants/AppConstants":171,"../dispatcher/AppDispatcher":172,"../utils/AppAPI":175,"events":1,"object-assign":6}],175:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -20202,6 +20273,7 @@ var AppAPI = {
                     // Show info
                 });
             }
+            // Switch to Promise methods later
             var timer = setInterval(function () {
                 if (storyCount == 0) {
                     payload.items = initTopStories;
@@ -20211,7 +20283,7 @@ var AppAPI = {
                 }
             }, 200);
         }).fail(function () {
-            // 
+            // Show info
         });
     },
     loadMoreTops: function loadMoreTops(callback) {
@@ -20241,4 +20313,4 @@ var AppAPI = {
 
 module.exports = AppAPI;
 
-},{"../actions/AppActions":164,"../dispatcher/AppDispatcher":171,"react":163}]},{},[172]);
+},{"../actions/AppActions":164,"../dispatcher/AppDispatcher":172,"react":163}]},{},[173]);

@@ -21,7 +21,6 @@ var App = React.createClass({
     // Add change listerns to stores and get Ajax response
     componentDidMount: function() {
         AppStore.addChangeListener(this._onChange);
-        AppAPI.getTops(); // First get top story ids and then load initial top stories
     },
     // Remove change listeners from stores
     componentWillUnmount: function() {

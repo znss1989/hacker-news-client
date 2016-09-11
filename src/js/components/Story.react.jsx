@@ -19,20 +19,20 @@ var Story = React.createClass({
         };
     },
     render: function() {
+        var datetime = new Date(this.state.time * 1000);
         return (
             <div>
                 <h6 className={this.state.deleted? "item-title deleted": "item-title"}>
-                    {this.state.title}
+                    {this.state.title + " "}
                     <a href={this.state.url}>
-                        <img src="./img/link.png" alt="link"/>
+                        <i className="iconfont">&#xe619;</i>
                     </a>
                 </h6>
                 <p className="by">{this.state.score} points |
                     by <a href={"https://news.ycombinator.com/user?id=" + this.state.by}>{this.state.by}</a>
-                    , at {this.state.time}
+                    , at {datetime.toLocaleDateString() + " " + datetime.toLocaleTimeString()}
                 </p>
                 <p>{this.state.comments? this.state.comments.length: 0} comments | <a href={"https://new.ycombinator.com/item?id=" + this.state.id}>Join</a></p>
-
             </div>
         );
     }
