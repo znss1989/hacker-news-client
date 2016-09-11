@@ -21,13 +21,14 @@ var TopStories = React.createClass({
             if ($(this).scrollTop() + $(window).height() + 100 >= $(document).height()) {
                 if (stopLoading == true) {
                     stopLoading = false;
+                    console.log("scroll loading invoked...");
                     AppAPI.loadMoreTops(toggleStopLoading);
                 }
             }
         });
     },
     offScrollToBottom: function() {
-        $(window).off('scroll', 'window');
+        $(window).off('scroll');
     },
     componentDidMount: function() {
         console.log("Tops did mount.");

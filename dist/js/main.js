@@ -19986,6 +19986,11 @@ var Story = require('../components/Story.react.jsx');
 var NewStories = React.createClass({
     displayName: 'NewStories',
 
+    getDefaultProps: function getDefaultProps() {
+        return {
+            newStories: []
+        };
+    },
     render: function render() {
         return React.createElement('div', null);
     }
@@ -20095,13 +20100,14 @@ var TopStories = React.createClass({
             if ($(this).scrollTop() + $(window).height() + 100 >= $(document).height()) {
                 if (stopLoading == true) {
                     stopLoading = false;
+                    console.log("scroll loading invoked...");
                     AppAPI.loadMoreTops(toggleStopLoading);
                 }
             }
         });
     },
     offScrollToBottom: function offScrollToBottom() {
-        $(window).off('scroll', 'window');
+        $(window).off('scroll');
     },
     componentDidMount: function componentDidMount() {
         console.log("Tops did mount.");
@@ -20230,6 +20236,7 @@ var AppStore = assign({}, EventEmitter.prototype, {
     clearTops: function clearTops() {
         _topStories = [];
         _topsPage = 0;
+        console.log("clearTops done.");
     },
 
     // Default methods

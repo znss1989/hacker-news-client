@@ -32,6 +32,7 @@ var AppStore = assign({}, EventEmitter.prototype, {
     clearTops: function() {
         _topStories = [];
         _topsPage = 0;
+        console.log("clearTops done.");
     },
 
     // Default methods

@@ -7,6 +7,11 @@ var AppStore = require('../stores/AppStore');
 var Story = require('../components/Story.react.jsx');
 
 var NewStories = React.createClass({
+    getDefaultProps: function() {
+        return {
+            newStories: []
+        };
+    },
     render: function() {
         return (
             <div>
