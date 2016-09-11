@@ -9,7 +9,7 @@ var itemBaseURL = "https://hacker-news.firebaseio.com/v0/item/";
 var itemPostfixUrl = ".json?print=pretty";
 var itemUrl = "";
 
-var _itemsPerPage = 25;
+var _itemsPerPage = 15;
 var _ids_top;
 var _page = 0;
 
@@ -42,7 +42,7 @@ var AppAPI = {
                         ++_page;
                         clearInterval(timer);
                     }
-                }, 500);
+                }, 200);
             })
             .fail(function() {
                 // 
@@ -71,7 +71,7 @@ var AppAPI = {
                 callback();
                 clearInterval(timer);
             }
-        }, 500);
+        }, 200);
     },
 };
 

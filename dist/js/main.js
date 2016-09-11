@@ -19834,7 +19834,7 @@ var AppActions = {
 
 module.exports = AppActions;
 
-},{"../constants/AppConstants":169,"../dispatcher/AppDispatcher":170}],165:[function(require,module,exports){
+},{"../constants/AppConstants":170,"../dispatcher/AppDispatcher":171}],165:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -19883,7 +19883,7 @@ var App = React.createClass({
 
 module.exports = App;
 
-},{"../actions/AppActions":164,"../dispatcher/AppDispatcher":170,"../stores/AppStore":172,"../utils/AppAPI":173,"./AppBody.react.jsx":166,"./AppHeader.react.jsx":167,"react":163}],166:[function(require,module,exports){
+},{"../actions/AppActions":164,"../dispatcher/AppDispatcher":171,"../stores/AppStore":173,"../utils/AppAPI":174,"./AppBody.react.jsx":166,"./AppHeader.react.jsx":167,"react":163}],166:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -19912,7 +19912,7 @@ var AppBody = React.createClass({
 
 module.exports = AppBody;
 
-},{"../actions/AppActions":164,"../stores/AppStore":172,"./TopStories.react.jsx":168,"react":163}],167:[function(require,module,exports){
+},{"../actions/AppActions":164,"../stores/AppStore":173,"./TopStories.react.jsx":169,"react":163}],167:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -19938,7 +19938,7 @@ var AppHeader = React.createClass({
 
 module.exports = AppHeader;
 
-},{"../actions/AppActions":164,"../stores/AppStore":172,"react":163}],168:[function(require,module,exports){
+},{"../actions/AppActions":164,"../stores/AppStore":173,"react":163}],168:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -19946,6 +19946,73 @@ var React = require('react');
 var AppAPI = require('../utils/AppAPI');
 var AppActions = require('../actions/AppActions');
 var AppStore = require('../stores/AppStore');
+
+var Story = React.createClass({
+    displayName: 'Story',
+
+    getInitialState: function getInitialState() {
+        var story = this.props.story;
+        return {
+            id: story.id,
+            title: story.title,
+            by: story.by,
+            url: story.url,
+            deleted: story.deleted,
+            time: story.time,
+            score: story.score,
+            comments: story.kids
+        };
+    },
+    render: function render() {
+        return React.createElement(
+            'div',
+            null,
+            React.createElement(
+                'h6',
+                { className: this.state.deleted ? "item-title deleted" : "item-title" },
+                this.state.title,
+                React.createElement(
+                    'a',
+                    { href: this.state.url },
+                    React.createElement('img', { src: './img/link.png', alt: 'link' })
+                )
+            ),
+            React.createElement(
+                'p',
+                { className: 'by' },
+                this.state.score,
+                ' points | by ',
+                this.state.by,
+                ', at ',
+                this.state.time
+            ),
+            React.createElement(
+                'p',
+                null,
+                this.state.comments ? this.state.comments.length : 0,
+                ' comments now | ',
+                React.createElement(
+                    'a',
+                    { href: "https://new.ycombinator.com/item?id=" + this.state.id },
+                    'Join'
+                )
+            )
+        );
+    }
+});
+
+module.exports = Story;
+
+},{"../actions/AppActions":164,"../stores/AppStore":173,"../utils/AppAPI":174,"react":163}],169:[function(require,module,exports){
+'use strict';
+
+var React = require('react');
+
+var AppAPI = require('../utils/AppAPI');
+var AppActions = require('../actions/AppActions');
+var AppStore = require('../stores/AppStore');
+
+var Story = require('../components/Story.react.jsx');
 
 var TopStories = React.createClass({
     displayName: 'TopStories',
@@ -19983,11 +20050,7 @@ var TopStories = React.createClass({
     render: function render() {
         var topStories = this.props.topStories;
         var topStoriesHtml = topStories.map(function (topStory) {
-            return React.createElement(
-                'p',
-                { key: topStory.id },
-                topStory.title
-            );
+            return React.createElement(Story, { key: topStory.id, story: topStory });
         });
         return React.createElement(
             'div',
@@ -19999,7 +20062,7 @@ var TopStories = React.createClass({
 
 module.exports = TopStories;
 
-},{"../actions/AppActions":164,"../stores/AppStore":172,"../utils/AppAPI":173,"react":163}],169:[function(require,module,exports){
+},{"../actions/AppActions":164,"../components/Story.react.jsx":168,"../stores/AppStore":173,"../utils/AppAPI":174,"react":163}],170:[function(require,module,exports){
 "use strict";
 
 module.exports = {
@@ -20007,7 +20070,7 @@ module.exports = {
     APP_LOAD_MORE_TOPS: "APP_LOAD_MORE_TOPS"
 };
 
-},{}],170:[function(require,module,exports){
+},{}],171:[function(require,module,exports){
 'use strict';
 
 var Dispatcher = require('flux').Dispatcher;
@@ -20045,7 +20108,7 @@ AppDispatcher.register(function (action) {
 
 module.exports = AppDispatcher;
 
-},{"../constants/AppConstants":169,"../stores/AppStore":172,"flux":3,"object-assign":6}],171:[function(require,module,exports){
+},{"../constants/AppConstants":170,"../stores/AppStore":173,"flux":3,"object-assign":6}],172:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -20056,7 +20119,7 @@ var App = require('./components/App.react.jsx');
 
 ReactDOM.render(React.createElement(App, null), document.getElementById('app'));
 
-},{"./components/App.react.jsx":165,"./utils/AppAPI.js":173,"react":163,"react-dom":7}],172:[function(require,module,exports){
+},{"./components/App.react.jsx":165,"./utils/AppAPI.js":174,"react":163,"react-dom":7}],173:[function(require,module,exports){
 'use strict';
 
 var AppDispatcher = require('../dispatcher/AppDispatcher');
@@ -20098,7 +20161,7 @@ var AppStore = assign({}, EventEmitter.prototype, {
 
 module.exports = AppStore;
 
-},{"../constants/AppConstants":169,"../dispatcher/AppDispatcher":170,"../utils/AppAPI":173,"events":1,"object-assign":6}],173:[function(require,module,exports){
+},{"../constants/AppConstants":170,"../dispatcher/AppDispatcher":171,"../utils/AppAPI":174,"events":1,"object-assign":6}],174:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -20112,7 +20175,7 @@ var itemBaseURL = "https://hacker-news.firebaseio.com/v0/item/";
 var itemPostfixUrl = ".json?print=pretty";
 var itemUrl = "";
 
-var _itemsPerPage = 25;
+var _itemsPerPage = 15;
 var _ids_top;
 var _page = 0;
 
@@ -20142,7 +20205,7 @@ var AppAPI = {
                     ++_page;
                     clearInterval(timer);
                 }
-            }, 500);
+            }, 200);
         }).fail(function () {
             // 
         });
@@ -20168,10 +20231,10 @@ var AppAPI = {
                 callback();
                 clearInterval(timer);
             }
-        }, 500);
+        }, 200);
     }
 };
 
 module.exports = AppAPI;
 
-},{"../actions/AppActions":164,"../dispatcher/AppDispatcher":170,"react":163}]},{},[171]);
+},{"../actions/AppActions":164,"../dispatcher/AppDispatcher":171,"react":163}]},{},[172]);

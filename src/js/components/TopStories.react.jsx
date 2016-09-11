@@ -4,6 +4,8 @@ var AppAPI = require('../utils/AppAPI');
 var AppActions = require('../actions/AppActions');
 var AppStore = require('../stores/AppStore');
 
+var Story = require('../components/Story.react.jsx');
+
 var TopStories = React.createClass({
     getDefaultProps: function() {
         return {
@@ -38,7 +40,7 @@ var TopStories = React.createClass({
     render: function() {
         var topStories = this.props.topStories;
         var topStoriesHtml = topStories.map(function(topStory) {
-            return (<p key={topStory.id} >{topStory.title}</p>);
+            return (<Story key={topStory.id} story={topStory} />);
         });
         return (
             <div>
