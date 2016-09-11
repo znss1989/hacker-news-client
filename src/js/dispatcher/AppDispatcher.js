@@ -24,9 +24,9 @@ AppDispatcher.register(function(action) {
         case AppConstants.APP_LOAD_MORE_TOPS:
             AppStore.loadMoreTops()
             break;
-        // Respond to APP_REFRESH_TOPS action:
-        case AppConstants.APP_REFRESH_TOPS:
-            AppStore.refreshTops();
+        // Respond to APP_CLEAR_TOPS action:
+        case AppConstants.APP_CLEAR_TOPS:
+            AppStore.clearTops();
             break;
 
         // Respond to ...

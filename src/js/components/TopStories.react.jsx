@@ -30,14 +30,15 @@ var TopStories = React.createClass({
         $(window).off('scroll', 'window');
     },
     componentDidMount: function() {
+        console.log("Tops did mount.");
         AppAPI.getTops(); // First get top story ids and then load initial top stories
         this.onScrollToBottom();
     },
-    componentWillUnMount: function() {
+    componentWillUnmount: function() {
         console.log("top unmounting...");
         this.offScrollToBottom();
         // Refresh data for tops when showing news
-        AppActions.refreshTopStories();
+        AppActions.clearTopStories();
     },
     shouldComponentUpdata: function() {},
     componentWillUpdata: function() {},

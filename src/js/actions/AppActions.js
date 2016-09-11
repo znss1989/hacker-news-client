@@ -14,11 +14,13 @@ var AppActions = {
             actionType: AppConstants.APP_LOAD_MORE_TOPS,
             callback: callback
         };
+        AppDispatcher.dispatch(action);
     },
-    refreshTopStories: function() {
+    clearTopStories: function() {
         var action = {
-            actionType: AppConstants.APP_REFRESH_TOPS,
-        }
+            actionType: AppConstants.APP_CLEAR_TOPS,
+        };
+        AppDispatcher.dispatch(action);
     },
 };
 

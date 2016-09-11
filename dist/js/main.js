@@ -19829,11 +19829,13 @@ var AppActions = {
             actionType: AppConstants.APP_LOAD_MORE_TOPS,
             callback: callback
         };
+        AppDispatcher.dispatch(action);
     },
-    refreshTopStories: function refreshTopStories() {
+    clearTopStories: function clearTopStories() {
         var action = {
-            actionType: AppConstants.APP_REFRESH_TOPS
+            actionType: AppConstants.APP_CLEAR_TOPS
         };
+        AppDispatcher.dispatch(action);
     }
 };
 
@@ -19918,6 +19920,7 @@ var AppBody = React.createClass({
         });
     },
     render: function render() {
+        var stories = this.state.showNew ? React.createElement(NewStories, null) : React.createElement(TopStories, { topStories: this.props.topStories });
         return React.createElement(
             'div',
             null,
@@ -19936,7 +19939,7 @@ var AppBody = React.createClass({
                 null,
                 'Content goes here...'
             ),
-            this.state.showNew ? React.createElement(NewStories, null) : React.createElement(TopStories, { topStories: this.props.topStories })
+            stories
         );
     }
 });
@@ -20101,14 +20104,15 @@ var TopStories = React.createClass({
         $(window).off('scroll', 'window');
     },
     componentDidMount: function componentDidMount() {
+        console.log("Tops did mount.");
         AppAPI.getTops(); // First get top story ids and then load initial top stories
         this.onScrollToBottom();
     },
-    componentWillUnMount: function componentWillUnMount() {
+    componentWillUnmount: function componentWillUnmount() {
         console.log("top unmounting...");
         this.offScrollToBottom();
         // Refresh data for tops when showing news
-        AppActions.refreshTopStories();
+        AppActions.clearTopStories();
     },
     shouldComponentUpdata: function shouldComponentUpdata() {},
     componentWillUpdata: function componentWillUpdata() {},
@@ -20133,7 +20137,7 @@ module.exports = TopStories;
 module.exports = {
     APP_STORE_TOPS: "APP_STORE_TOPS",
     APP_LOAD_MORE_TOPS: "APP_LOAD_MORE_TOPS",
-    APP_REFRESH_TOPS: "APP_REFRESH_TOPS"
+    APP_CLEAR_TOPS: "APP_CLEAR_TOPS"
 };
 
 },{}],172:[function(require,module,exports){
@@ -20165,9 +20169,9 @@ AppDispatcher.register(function (action) {
         case AppConstants.APP_LOAD_MORE_TOPS:
             AppStore.loadMoreTops();
             break;
-        // Respond to APP_REFRESH_TOPS action:
-        case AppConstants.APP_REFRESH_TOPS:
-            AppStore.refreshTops();
+        // Respond to APP_CLEAR_TOPS action:
+        case AppConstants.APP_CLEAR_TOPS:
+            AppStore.clearTops();
             break;
 
         // Respond to ...
@@ -20217,9 +20221,8 @@ var AppStore = assign({}, EventEmitter.prototype, {
         };
         _topStories = _topStories.concat(stories);
     },
-    refreshTops: function refreshTops() {
+    clearTops: function clearTops() {
         _topStories = [];
-        AppAPI.getTops();
     },
 
     // Default methods
