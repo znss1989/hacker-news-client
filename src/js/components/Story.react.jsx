@@ -27,8 +27,11 @@ var Story = React.createClass({
                         <img src="./img/link.png" alt="link"/>
                     </a>
                 </h6>
-                <p className="by">{this.state.score} points | by {this.state.by}, at {this.state.time}</p>
-                <p>{this.state.comments? this.state.comments.length: 0} comments now | <a href={"https://new.ycombinator.com/item?id=" + this.state.id}>Join</a></p>
+                <p className="by">{this.state.score} points |
+                    by <a href={"https://news.ycombinator.com/user?id=" + this.state.by}>{this.state.by}</a>
+                    , at {this.state.time}
+                </p>
+                <p>{this.state.comments? this.state.comments.length: 0} comments | <a href={"https://new.ycombinator.com/item?id=" + this.state.id}>Join</a></p>
 
             </div>
         );

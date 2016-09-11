@@ -19982,7 +19982,11 @@ var Story = React.createClass({
                 { className: 'by' },
                 this.state.score,
                 ' points | by ',
-                this.state.by,
+                React.createElement(
+                    'a',
+                    { href: "https://news.ycombinator.com/user?id=" + this.state.by },
+                    this.state.by
+                ),
                 ', at ',
                 this.state.time
             ),
@@ -19990,7 +19994,7 @@ var Story = React.createClass({
                 'p',
                 null,
                 this.state.comments ? this.state.comments.length : 0,
-                ' comments now | ',
+                ' comments | ',
                 React.createElement(
                     'a',
                     { href: "https://new.ycombinator.com/item?id=" + this.state.id },
