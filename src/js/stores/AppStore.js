@@ -52,6 +52,11 @@ var AppStore = assign({}, EventEmitter.prototype, {
         }
         _newStories = _newStories.concat(stories);
     },
+    clearNews: function() {
+        _newStories = [];
+        _newsPage = 0;
+        console.log("clearNews done.");
+    },
 
     // Default methods
     emitChange: function() {

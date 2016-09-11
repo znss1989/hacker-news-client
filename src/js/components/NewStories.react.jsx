@@ -31,14 +31,14 @@ var NewStories = React.createClass({
         $(window).off('scroll');
     },
     componentDidMount: function() {
-        console.log("Tops did mount.");
-        AppAPI.getNews(); // First get top story ids and then load initial top stories
+        console.log("News did mount.");
+        AppAPI.getNews(); // First get new story ids and then load initial new stories
         this.onScrollToBottom();
     },
     componentWillUnmount: function() {
-        console.log("top unmounting...");
+        console.log("News unmounting...");
         this.offScrollToBottom();
-        AppActions.clearTopStories();
+        AppActions.clearNewStories();
     },
     render: function() {
         var newStories = this.props.newStories;

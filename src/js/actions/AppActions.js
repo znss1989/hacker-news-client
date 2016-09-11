@@ -9,13 +9,6 @@ var AppActions = {
         };
         AppDispatcher.dispatch(action);
     },
-    loadMoreTops: function(callback) {
-        var action = {
-            actionType: AppConstants.APP_LOAD_MORE_TOPS,
-            callback: callback
-        };
-        AppDispatcher.dispatch(action);
-    },
     clearTopStories: function() {
         var action = {
             actionType: AppConstants.APP_CLEAR_TOPS,
@@ -28,7 +21,13 @@ var AppActions = {
             payload: payload
         };
         AppDispatcher.dispatch(action);
-    }
+    },
+    clearNewStories: function() {
+        var action = {
+            actionType: AppConstants.APP_CLEAR_NEWS,
+        };
+        AppDispatcher.dispatch(action);
+    },
 };
 
 module.exports = AppActions;

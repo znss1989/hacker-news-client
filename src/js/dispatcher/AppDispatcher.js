@@ -20,10 +20,6 @@ AppDispatcher.register(function(action) {
         case AppConstants.APP_STORE_TOPS:
             AppStore.saveTopStories(action.payload);
             break;
-        // Respond to APP_LOAD_MORE_TOPS action:
-        case AppConstants.APP_LOAD_MORE_TOPS:
-            AppStore.loadMoreTops()
-            break;
         // Respond to APP_CLEAR_TOPS action:
         case AppConstants.APP_CLEAR_TOPS:
             AppStore.clearTops();
@@ -31,6 +27,10 @@ AppDispatcher.register(function(action) {
         // Respond to APP_STORE_NEWS action:
         case AppConstants.APP_STORE_NEWS:
             AppStore.saveNewStories(action.payload);
+            break;
+        // Respond to APP_CLEAR_NEWS action:
+        case AppConstants.APP_CLEAR_NEWS:
+            AppStore.clearNews();
             break;
 
         // Respond to ...

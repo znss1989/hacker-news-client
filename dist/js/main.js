@@ -19824,13 +19824,6 @@ var AppActions = {
         };
         AppDispatcher.dispatch(action);
     },
-    loadMoreTops: function loadMoreTops(callback) {
-        var action = {
-            actionType: AppConstants.APP_LOAD_MORE_TOPS,
-            callback: callback
-        };
-        AppDispatcher.dispatch(action);
-    },
     clearTopStories: function clearTopStories() {
         var action = {
             actionType: AppConstants.APP_CLEAR_TOPS
@@ -19841,6 +19834,12 @@ var AppActions = {
         var action = {
             actionType: AppConstants.APP_STORE_NEWS,
             payload: payload
+        };
+        AppDispatcher.dispatch(action);
+    },
+    clearNewStories: function clearNewStories() {
+        var action = {
+            actionType: AppConstants.APP_CLEAR_NEWS
         };
         AppDispatcher.dispatch(action);
     }
@@ -20018,14 +20017,14 @@ var NewStories = React.createClass({
         $(window).off('scroll');
     },
     componentDidMount: function componentDidMount() {
-        console.log("Tops did mount.");
-        AppAPI.getNews(); // First get top story ids and then load initial top stories
+        console.log("News did mount.");
+        AppAPI.getNews(); // First get new story ids and then load initial new stories
         this.onScrollToBottom();
     },
     componentWillUnmount: function componentWillUnmount() {
-        console.log("top unmounting...");
+        console.log("News unmounting...");
         this.offScrollToBottom();
-        AppActions.clearTopStories();
+        AppActions.clearNewStories();
     },
     render: function render() {
         var newStories = this.props.newStories;
@@ -20183,9 +20182,9 @@ module.exports = TopStories;
 
 module.exports = {
     APP_STORE_TOPS: "APP_STORE_TOPS",
-    APP_LOAD_MORE_TOPS: "APP_LOAD_MORE_TOPS",
     APP_CLEAR_TOPS: "APP_CLEAR_TOPS",
-    APP_STORE_NEWS: "APP_STORE_NEWS"
+    APP_STORE_NEWS: "APP_STORE_NEWS",
+    APP_CLEAR_NEWS: "APP_CLEAR_NEWS"
 };
 
 },{}],172:[function(require,module,exports){
@@ -20213,10 +20212,6 @@ AppDispatcher.register(function (action) {
         case AppConstants.APP_STORE_TOPS:
             AppStore.saveTopStories(action.payload);
             break;
-        // Respond to APP_LOAD_MORE_TOPS action:
-        case AppConstants.APP_LOAD_MORE_TOPS:
-            AppStore.loadMoreTops();
-            break;
         // Respond to APP_CLEAR_TOPS action:
         case AppConstants.APP_CLEAR_TOPS:
             AppStore.clearTops();
@@ -20224,6 +20219,10 @@ AppDispatcher.register(function (action) {
         // Respond to APP_STORE_NEWS action:
         case AppConstants.APP_STORE_NEWS:
             AppStore.saveNewStories(action.payload);
+            break;
+        // Respond to APP_CLEAR_NEWS action:
+        case AppConstants.APP_CLEAR_NEWS:
+            AppStore.clearNews();
             break;
 
         // Respond to ...
@@ -20302,6 +20301,11 @@ var AppStore = assign({}, EventEmitter.prototype, {
             return;
         }
         _newStories = _newStories.concat(stories);
+    },
+    clearNews: function clearNews() {
+        _newStories = [];
+        _newsPage = 0;
+        console.log("clearNews done.");
     },
 
     // Default methods
@@ -20419,7 +20423,6 @@ var AppAPI = {
             var timer = setInterval(function () {
                 if (storyCount == 0) {
                     payload.items = initNewStories;
-                    console.log(initNewStories);
                     AppActions.storeNewStories(payload);
                     ++page;
                     AppStore.setNewsPage(page);
