@@ -20356,7 +20356,9 @@ var AppAPI = {
             for (var i = 0; i < _itemsPerPage; ++i) {
                 itemUrl = itemBaseURL + _ids_top[i] + itemPostfixUrl;
                 $.ajax(itemUrl, { dataType: 'jsonp' }).done(function (data) {
-                    initTopStories.push(data);
+                    // Keep its original order as in ids
+                    var index = _ids_top.slice(page * _itemsPerPage, page * _itemsPerPage + _itemsPerPage).indexOf(data.id);
+                    initTopStories[index] = data;
                     --storyCount;
                 }).fail(function () {
                     // Show info
@@ -20384,7 +20386,9 @@ var AppAPI = {
         for (var i = 0; i < _itemsPerPage; ++i) {
             itemUrl = itemBaseURL + _ids_top[page * _itemsPerPage + i] + itemPostfixUrl;
             $.ajax(itemUrl, { dataType: 'jsonp' }).done(function (data) {
-                moreStories.push(data);
+                // Keep its original order as in ids
+                var index = _ids_top.slice(page * _itemsPerPage, page * _itemsPerPage + _itemsPerPage).indexOf(data.id);
+                moreStories[index] = data;
                 --storyCount;
             }).fail(function () {
                 // Show info
@@ -20413,7 +20417,9 @@ var AppAPI = {
             for (var i = 0; i < _itemsPerPage; ++i) {
                 itemUrl = itemBaseURL + _ids_new[i] + itemPostfixUrl;
                 $.ajax(itemUrl, { dataType: 'jsonp' }).done(function (data) {
-                    initNewStories.push(data);
+                    // Keep its original order as in ids
+                    var index = _ids_new.slice(page * _itemsPerPage, page * _itemsPerPage + _itemsPerPage).indexOf(data.id);
+                    initNewStories[index] = data;
                     --storyCount;
                 }).fail(function () {
                     // Show info
@@ -20441,7 +20447,9 @@ var AppAPI = {
         for (var i = 0; i < _itemsPerPage; ++i) {
             itemUrl = itemBaseURL + _ids_new[page * _itemsPerPage + i] + itemPostfixUrl;
             $.ajax(itemUrl, { dataType: 'jsonp' }).done(function (data) {
-                moreStories.push(data);
+                // Keep its original order as in ids
+                var index = _ids_new.slice(page * _itemsPerPage, page * _itemsPerPage + _itemsPerPage).indexOf(data.id);
+                moreStories[index] = data;
                 --storyCount;
             }).fail(function () {
                 // Show info
