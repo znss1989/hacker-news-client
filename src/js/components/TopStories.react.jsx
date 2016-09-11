@@ -37,7 +37,6 @@ var TopStories = React.createClass({
     componentWillUnmount: function() {
         console.log("top unmounting...");
         this.offScrollToBottom();
-        // Refresh data for tops when showing news
         AppActions.clearTopStories();
     },
     shouldComponentUpdata: function() {},

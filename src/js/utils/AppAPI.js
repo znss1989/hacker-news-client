@@ -2,6 +2,7 @@ var React = require('react');
 
 var AppActions = require('../actions/AppActions');
 var AppDispatcher = require('../dispatcher/AppDispatcher');
+var AppStore = require('../stores/AppStore');
 
 // Url related definitions
 var topStoriesUrl = "https://hacker-news.firebaseio.com/v0/topstories.json?print=pretty";
@@ -11,11 +12,11 @@ var itemUrl = "";
 
 var _itemsPerPage = 15;
 var _ids_top;
-var _page = 0;
 
 // Define API object
 var AppAPI = {
     getTops: function() {
+        var page = AppStore.getTopsPage();
         var payload = {};
         $.ajax(topStoriesUrl, {dataType: 'jsonp'})
             .done(function(data) {
@@ -40,7 +41,8 @@ var AppAPI = {
                     if (storyCount == 0) {
                         payload.items = initTopStories;
                         AppActions.storeTopStories(payload);
-                        ++_page;
+                        ++page;
+                        AppStore.setTopsPage(page);
                         clearInterval(timer);
                     }
                 }, 200);
@@ -50,11 +52,12 @@ var AppAPI = {
             });        
     },
     loadMoreTops: function(callback) {
+        var page = AppStore.getTopsPage();
         var payload = {};
         var moreStories = [];
         var storyCount = _itemsPerPage;
         for (var i = 0; i < _itemsPerPage; ++i) {
-            itemUrl = itemBaseURL + _ids_top[_page * _itemsPerPage + i] + itemPostfixUrl;
+            itemUrl = itemBaseURL + _ids_top[page * _itemsPerPage + i] + itemPostfixUrl;
             $.ajax(itemUrl, {dataType: 'jsonp'})
                 .done(function(data) {
                     moreStories.push(data);
@@ -68,7 +71,8 @@ var AppAPI = {
             if (storyCount == 0) {
                 payload.items = moreStories;
                 AppActions.storeTopStories(payload);
-                ++_page;
+                ++page;
+                AppStore.setTopsPage(page);
                 callback();
                 clearInterval(timer);
             }

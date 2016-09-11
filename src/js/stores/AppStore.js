@@ -7,11 +7,18 @@ var AppAPI = require('../utils/AppAPI');
 var CHANGE_EVENT = 'change';
 
 var _topStories = [];
+var _topsPage = 0;
 
 var AppStore = assign({}, EventEmitter.prototype, {
-    // Get private data at stores
+    // Get/set private data at stores
     getTopStories: function() {
         return _topStories;
+    },
+    getTopsPage: function() {
+        return _topsPage;
+    },
+    setTopsPage: function(page) {
+        _topsPage = page;
     },
 
     // Action driven methods
@@ -24,6 +31,7 @@ var AppStore = assign({}, EventEmitter.prototype, {
     },
     clearTops: function() {
         _topStories = [];
+        _topsPage = 0;
     },
 
     // Default methods
