@@ -105,6 +105,7 @@ var AppAPI = {
                 var timer = setInterval(function() {
                     if (storyCount == 0) {
                         payload.items = initNewStories;
+                        console.log(initNewStories);
                         AppActions.storeNewStories(payload);
                         ++page;
                         AppStore.setNewsPage(page);

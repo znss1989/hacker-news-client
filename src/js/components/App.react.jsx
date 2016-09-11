@@ -11,6 +11,7 @@ var AppBody = require('./AppBody.react.jsx');
 function getAppState() {
     return {
         topStories: AppStore.getTopStories(),
+        newStories: AppStore.getNewStories(),
     };
 };
 
@@ -33,7 +34,7 @@ var App = React.createClass({
         return (
             <div>
                 <AppHeader />
-                <AppBody topStories = {this.state.topStories} />            
+                <AppBody topStories={this.state.topStories} newStories={this.state.newStories} />            
             </div>
         );
     }

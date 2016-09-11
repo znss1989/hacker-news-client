@@ -19863,7 +19863,8 @@ var AppBody = require('./AppBody.react.jsx');
 
 function getAppState() {
     return {
-        topStories: AppStore.getTopStories()
+        topStories: AppStore.getTopStories(),
+        newStories: AppStore.getNewStories()
     };
 };
 
@@ -19889,7 +19890,7 @@ var App = React.createClass({
             'div',
             null,
             React.createElement(AppHeader, null),
-            React.createElement(AppBody, { topStories: this.state.topStories })
+            React.createElement(AppBody, { topStories: this.state.topStories, newStories: this.state.newStories })
         );
     }
 });
@@ -19927,7 +19928,7 @@ var AppBody = React.createClass({
         });
     },
     render: function render() {
-        var stories = this.state.showNew ? React.createElement(NewStories, null) : React.createElement(TopStories, { topStories: this.props.topStories });
+        var stories = this.state.showNew ? React.createElement(NewStories, { newStories: this.props.newStories }) : React.createElement(TopStories, { topStories: this.props.topStories });
         return React.createElement(
             'div',
             null,
@@ -20027,7 +20028,15 @@ var NewStories = React.createClass({
         AppActions.clearTopStories();
     },
     render: function render() {
-        return React.createElement('div', null);
+        var newStories = this.props.newStories;
+        var newStoriesHtml = newStories.map(function (newStory) {
+            return React.createElement(Story, { key: newStory.id, story: newStory });
+        });
+        return React.createElement(
+            'div',
+            null,
+            newStoriesHtml
+        );
     }
 });
 
@@ -20410,6 +20419,7 @@ var AppAPI = {
             var timer = setInterval(function () {
                 if (storyCount == 0) {
                     payload.items = initNewStories;
+                    console.log(initNewStories);
                     AppActions.storeNewStories(payload);
                     ++page;
                     AppStore.setNewsPage(page);

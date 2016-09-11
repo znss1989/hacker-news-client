@@ -24,7 +24,7 @@ var AppBody = React.createClass({
         });
     },
     render: function() {
-        var stories = this.state.showNew? <NewStories />: <TopStories topStories={this.props.topStories} />;
+        var stories = this.state.showNew? <NewStories newStories={this.props.newStories} />: <TopStories topStories={this.props.topStories} />;
         return (
             <div>
                 <button onClick={this.onShowTop}>Tops</button>

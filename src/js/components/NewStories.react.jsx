@@ -41,9 +41,13 @@ var NewStories = React.createClass({
         AppActions.clearTopStories();
     },
     render: function() {
+        var newStories = this.props.newStories;
+        var newStoriesHtml = newStories.map(function(newStory) {
+            return (<Story key={newStory.id} story={newStory} />);
+        });
         return (
             <div>
-                
+                {newStoriesHtml}
             </div>
         );
     }
