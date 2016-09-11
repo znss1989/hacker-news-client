@@ -19836,6 +19836,13 @@ var AppActions = {
             actionType: AppConstants.APP_CLEAR_TOPS
         };
         AppDispatcher.dispatch(action);
+    },
+    storeNewStories: function storeNewStories(payload) {
+        var action = {
+            actionType: AppConstants.APP_STORE_NEWS,
+            payload: payload
+        };
+        AppDispatcher.dispatch(action);
     }
 };
 
@@ -19991,6 +19998,34 @@ var NewStories = React.createClass({
             newStories: []
         };
     },
+    onScrollToBottom: function onScrollToBottom() {
+        var stopLoading = true;
+        var toggleStopLoading = function toggleStopLoading() {
+            stopLoading = !stopLoading;
+        };
+        $(window).scroll(function () {
+            if ($(this).scrollTop() + $(window).height() + 100 >= $(document).height()) {
+                if (stopLoading == true) {
+                    stopLoading = false;
+                    console.log("scroll loading invoked...");
+                    AppAPI.loadMoreNews(toggleStopLoading);
+                }
+            }
+        });
+    },
+    offScrollToBottom: function offScrollToBottom() {
+        $(window).off('scroll');
+    },
+    componentDidMount: function componentDidMount() {
+        console.log("Tops did mount.");
+        AppAPI.getNews(); // First get top story ids and then load initial top stories
+        this.onScrollToBottom();
+    },
+    componentWillUnmount: function componentWillUnmount() {
+        console.log("top unmounting...");
+        this.offScrollToBottom();
+        AppActions.clearTopStories();
+    },
     render: function render() {
         return React.createElement('div', null);
     }
@@ -20119,8 +20154,6 @@ var TopStories = React.createClass({
         this.offScrollToBottom();
         AppActions.clearTopStories();
     },
-    shouldComponentUpdata: function shouldComponentUpdata() {},
-    componentWillUpdata: function componentWillUpdata() {},
     render: function render() {
         var topStories = this.props.topStories;
         var topStoriesHtml = topStories.map(function (topStory) {
@@ -20142,7 +20175,8 @@ module.exports = TopStories;
 module.exports = {
     APP_STORE_TOPS: "APP_STORE_TOPS",
     APP_LOAD_MORE_TOPS: "APP_LOAD_MORE_TOPS",
-    APP_CLEAR_TOPS: "APP_CLEAR_TOPS"
+    APP_CLEAR_TOPS: "APP_CLEAR_TOPS",
+    APP_STORE_NEWS: "APP_STORE_NEWS"
 };
 
 },{}],172:[function(require,module,exports){
@@ -20178,6 +20212,10 @@ AppDispatcher.register(function (action) {
         case AppConstants.APP_CLEAR_TOPS:
             AppStore.clearTops();
             break;
+        // Respond to APP_STORE_NEWS action:
+        case AppConstants.APP_STORE_NEWS:
+            AppStore.saveNewStories(action.payload);
+            break;
 
         // Respond to ...
         default:
@@ -20212,6 +20250,8 @@ var CHANGE_EVENT = 'change';
 
 var _topStories = [];
 var _topsPage = 0;
+var _newStories = [];
+var _newsPage = 0;
 
 var AppStore = assign({}, EventEmitter.prototype, {
     // Get/set private data at stores
@@ -20223,6 +20263,15 @@ var AppStore = assign({}, EventEmitter.prototype, {
     },
     setTopsPage: function setTopsPage(page) {
         _topsPage = page;
+    },
+    getNewStories: function getNewStories() {
+        return _newStories;
+    },
+    getNewsPage: function getNewsPage() {
+        return _newsPage;
+    },
+    setNewsPage: function setNewsPage(page) {
+        _newsPage = page;
     },
 
     // Action driven methods
@@ -20237,6 +20286,13 @@ var AppStore = assign({}, EventEmitter.prototype, {
         _topStories = [];
         _topsPage = 0;
         console.log("clearTops done.");
+    },
+    saveNewStories: function saveNewStories(payload) {
+        var stories = payload.items;
+        if (!stories) {
+            return;
+        }
+        _newStories = _newStories.concat(stories);
     },
 
     // Default methods
@@ -20264,12 +20320,14 @@ var AppStore = require('../stores/AppStore');
 
 // Url related definitions
 var topStoriesUrl = "https://hacker-news.firebaseio.com/v0/topstories.json?print=pretty";
+var newStoriesUrl = "https://hacker-news.firebaseio.com/v0/newstories.json?print=pretty";
 var itemBaseURL = "https://hacker-news.firebaseio.com/v0/item/";
 var itemPostfixUrl = ".json?print=pretty";
 var itemUrl = "";
 
 var _itemsPerPage = 15;
 var _ids_top;
+var _ids_new;
 
 // Define API object
 var AppAPI = {
@@ -20325,6 +20383,63 @@ var AppAPI = {
                 AppActions.storeTopStories(payload);
                 ++page;
                 AppStore.setTopsPage(page);
+                callback();
+                clearInterval(timer);
+            }
+        }, 200);
+    },
+    getNews: function getNews() {
+        var page = AppStore.getNewsPage();
+        var payload = {};
+        $.ajax(newStoriesUrl, { dataType: 'jsonp' }).done(function (data) {
+            // Save the ids
+            _ids_new = data;
+
+            var initNewStories = [];
+            var storyCount = _itemsPerPage;
+            for (var i = 0; i < _itemsPerPage; ++i) {
+                itemUrl = itemBaseURL + _ids_new[i] + itemPostfixUrl;
+                $.ajax(itemUrl, { dataType: 'jsonp' }).done(function (data) {
+                    initNewStories.push(data);
+                    --storyCount;
+                }).fail(function () {
+                    // Show info
+                });
+            }
+            // Switch to Promise methods later
+            var timer = setInterval(function () {
+                if (storyCount == 0) {
+                    payload.items = initNewStories;
+                    AppActions.storeNewStories(payload);
+                    ++page;
+                    AppStore.setNewsPage(page);
+                    clearInterval(timer);
+                }
+            }, 200);
+        }).fail(function () {
+            // Show info
+        });
+    },
+    loadMoreNews: function loadMoreNews(callback) {
+        var page = AppStore.getNewsPage();
+        var payload = {};
+        var moreStories = [];
+        var storyCount = _itemsPerPage;
+        for (var i = 0; i < _itemsPerPage; ++i) {
+            itemUrl = itemBaseURL + _ids_new[page * _itemsPerPage + i] + itemPostfixUrl;
+            $.ajax(itemUrl, { dataType: 'jsonp' }).done(function (data) {
+                moreStories.push(data);
+                --storyCount;
+            }).fail(function () {
+                // Show info
+            });
+        }
+        var timer = setInterval(function () {
+            if (storyCount == 0) {
+                payload.items = moreStories;
+                AppActions.storeNewStories(payload);
+                ++page;
+                AppStore.setNewsPage(page);
                 callback();
                 clearInterval(timer);
             }

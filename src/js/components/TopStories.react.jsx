@@ -40,8 +40,6 @@ var TopStories = React.createClass({
         this.offScrollToBottom();
         AppActions.clearTopStories();
     },
-    shouldComponentUpdata: function() {},
-    componentWillUpdata: function() {},
     render: function() {
         var topStories = this.props.topStories;
         var topStoriesHtml = topStories.map(function(topStory) {

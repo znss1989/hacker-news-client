@@ -22,6 +22,13 @@ var AppActions = {
         };
         AppDispatcher.dispatch(action);
     },
+    storeNewStories: function(payload) {
+        var action = {
+            actionType: AppConstants.APP_STORE_NEWS,
+            payload: payload
+        };
+        AppDispatcher.dispatch(action);
+    }
 };
 
 module.exports = AppActions;

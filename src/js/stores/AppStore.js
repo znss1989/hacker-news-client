@@ -8,6 +8,8 @@ var CHANGE_EVENT = 'change';
 
 var _topStories = [];
 var _topsPage = 0;
+var _newStories = [];
+var _newsPage = 0;
 
 var AppStore = assign({}, EventEmitter.prototype, {
     // Get/set private data at stores
@@ -19,6 +21,15 @@ var AppStore = assign({}, EventEmitter.prototype, {
     },
     setTopsPage: function(page) {
         _topsPage = page;
+    },
+    getNewStories: function() {
+        return _newStories;
+    },
+    getNewsPage: function() {
+        return _newsPage;
+    },
+    setNewsPage: function(page) {
+        _newsPage = page;
     },
 
     // Action driven methods
@@ -33,6 +44,13 @@ var AppStore = assign({}, EventEmitter.prototype, {
         _topStories = [];
         _topsPage = 0;
         console.log("clearTops done.");
+    },
+    saveNewStories: function(payload) {
+        var stories = payload.items;
+        if (!stories) {
+            return;
+        }
+        _newStories = _newStories.concat(stories);
     },
 
     // Default methods

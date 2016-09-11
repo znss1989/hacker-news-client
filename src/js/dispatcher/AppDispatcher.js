@@ -28,6 +28,10 @@ AppDispatcher.register(function(action) {
         case AppConstants.APP_CLEAR_TOPS:
             AppStore.clearTops();
             break;
+        // Respond to APP_STORE_NEWS action:
+        case AppConstants.APP_STORE_NEWS:
+            AppStore.saveNewStories(action.payload);
+            break;
 
         // Respond to ...
         default:
