@@ -19930,23 +19930,34 @@ var AppBody = React.createClass({
         var stories = this.state.showNew ? React.createElement(NewStories, { newStories: this.props.newStories }) : React.createElement(TopStories, { topStories: this.props.topStories });
         return React.createElement(
             'div',
-            null,
+            { className: 'container' },
             React.createElement(
-                'button',
-                { onClick: this.onShowTop },
-                'Tops'
+                'ul',
+                { className: 'nav nav-tabs', role: 'tablist' },
+                React.createElement(
+                    'li',
+                    { role: 'presentation', className: this.state.showNew ? "" : "active", onClick: this.onShowTop },
+                    React.createElement(
+                        'a',
+                        { href: '#' },
+                        'Tops'
+                    )
+                ),
+                React.createElement(
+                    'li',
+                    { role: 'presentation', className: this.state.showNew ? "active" : "", onClick: this.onShowNew },
+                    React.createElement(
+                        'a',
+                        { href: '#' },
+                        'Newest'
+                    )
+                )
             ),
             React.createElement(
-                'button',
-                { onClick: this.onShowNew },
-                'Newest'
-            ),
-            React.createElement(
-                'span',
-                null,
-                'Content goes here...'
-            ),
-            stories
+                'div',
+                { className: 'stories' },
+                stories
+            )
         );
     }
 });
@@ -19967,11 +19978,16 @@ var AppHeader = React.createClass({
     render: function render() {
         return React.createElement(
             'div',
-            null,
+            { className: 'container page-header m-b-3' },
             React.createElement(
                 'h1',
                 null,
-                'Hacker News'
+                'Hacker News ',
+                React.createElement(
+                    'small',
+                    null,
+                    'by Y Combinator'
+                )
             )
         );
     }
@@ -20070,7 +20086,7 @@ var Story = React.createClass({
         var datetime = new Date(this.state.time * 1000);
         return React.createElement(
             'div',
-            null,
+            { className: 'card' },
             React.createElement(
                 'h6',
                 { className: this.state.deleted ? "item-title deleted" : "item-title" },

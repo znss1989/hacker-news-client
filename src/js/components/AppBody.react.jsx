@@ -26,11 +26,14 @@ var AppBody = React.createClass({
     render: function() {
         var stories = this.state.showNew? <NewStories newStories={this.props.newStories} />: <TopStories topStories={this.props.topStories} />;
         return (
-            <div>
-                <button onClick={this.onShowTop}>Tops</button>
-                <button onClick={this.onShowNew}>Newest</button>
-                <span>Content goes here...</span>
-                {stories}
+            <div className="container">
+                <ul className="nav nav-tabs" role="tablist">
+                    <li role="presentation" className={this.state.showNew? "": "active"} onClick={this.onShowTop}><a href="#">Tops</a></li>
+                    <li role="presentation" className={this.state.showNew? "active": ""} onClick={this.onShowNew}><a href="#">Newest</a></li>
+                </ul>
+                <div className="stories">
+                    {stories}
+                </div>
             </div>
         );
     }

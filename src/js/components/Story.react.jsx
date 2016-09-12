@@ -21,7 +21,7 @@ var Story = React.createClass({
     render: function() {
         var datetime = new Date(this.state.time * 1000);
         return (
-            <div>
+            <div className="card">
                 <h6 className={this.state.deleted? "item-title deleted": "item-title"}>
                     {this.state.title + " "}
                     <a href={this.state.url}>
