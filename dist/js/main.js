@@ -19912,7 +19912,8 @@ var AppBody = React.createClass({
 
     getInitialState: function getInitialState() {
         return {
-            showNew: false
+            showNew: false,
+            loading: true
         };
     },
     onShowTop: function onShowTop(evt) {
@@ -19926,7 +19927,17 @@ var AppBody = React.createClass({
             showNew: true
         });
     },
+    onLoadReady: function onLoadReady() {
+        this.setState({
+            loading: false
+        });
+    },
     render: function render() {
+        var loadingBar = React.createElement(
+            'div',
+            { className: 'load-10' },
+            React.createElement('div', { className: 'bar' })
+        );
         var stories = this.state.showNew ? React.createElement(NewStories, { newStories: this.props.newStories }) : React.createElement(TopStories, { topStories: this.props.topStories });
         return React.createElement(
             'div',
@@ -19967,7 +19978,8 @@ var AppBody = React.createClass({
                 'div',
                 { className: 'stories' },
                 stories
-            )
+            ),
+            loadingBar
         );
     }
 });

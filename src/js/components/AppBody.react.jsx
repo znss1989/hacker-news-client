@@ -9,7 +9,8 @@ var NewStories = require('./NewStories.react.jsx');
 var AppBody = React.createClass({
     getInitialState: function() {
         return {
-            showNew: false
+            showNew: false,
+            loading: true
         };
     },
     onShowTop: function(evt) {
@@ -23,7 +24,17 @@ var AppBody = React.createClass({
             showNew: true
         });
     },
+    onLoadReady: function() {
+        this.setState({
+            loading: false
+        });
+    },
     render: function() {
+        var loadingBar = (                
+            <div className="load-10">
+                <div className="bar"></div>
+            </div>
+        );
         var stories = this.state.showNew? <NewStories newStories={this.props.newStories} />: <TopStories topStories={this.props.topStories} />;
         return (
             <div className="container">
@@ -34,6 +45,7 @@ var AppBody = React.createClass({
                 <div className="stories">
                     {stories}
                 </div>
+                {loadingBar}
             </div>
         );
     }
