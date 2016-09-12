@@ -35,12 +35,17 @@
 
 body {
   /*font-size: 16px;*/
+  background: #333;
   
 }
 
+h1 {
+  color: #fff;
+}
+
 .stories {
-  background: #f2f2f2;
-  width: 95%;
+  background: #fff;
+  padding: 0 5px;
 }
 
 .card {
@@ -57,12 +62,33 @@ body {
   border-left: 4px solid #98E2FA;
 }
 
-.card.read {
-  border-left: 4px solid #CDFCBD;
+.by {
+  margin-bottom: 3px;
+  line-height: 1.2;
+  color: #999;
+}
+
+.by + p {
+  color: #999;
+  line-height: 1.2;
+}
+
+.card {
+  background: #fff;
+  /*border-radius: 2px;*/
+  /*display: inline-block;*/
+  /*height: 300px;*/
+  position: relative;
+  padding:20px 20px;
+  border-bottom: 1px solid #ddd;
+  /*width: 95%;*/
+  /*box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);*/
+  transition: all 0.3s cubic-bezier(.25,.8,.25,1);
 }
 
 .card:hover {
-  box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+  background: #f2f2f2;
+  /*box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);*/
 }
 
 .card h6 {
@@ -70,7 +96,7 @@ body {
 }
 
 .nav {
-  width: 95%;
+  padding: 0 5px;
 }
 
 .nav-tabs a {
