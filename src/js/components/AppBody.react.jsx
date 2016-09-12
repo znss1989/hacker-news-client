@@ -28,8 +28,8 @@ var AppBody = React.createClass({
         return (
             <div className="container">
                 <ul className="nav nav-tabs" role="tablist">
-                    <li role="presentation" className={this.state.showNew? "": "active"} onClick={this.onShowTop}><a href="#">Tops</a></li>
-                    <li role="presentation" className={this.state.showNew? "active": ""} onClick={this.onShowNew}><a href="#">Newest</a></li>
+                    <li role="presentation" className={this.state.showNew? "": "active"} onClick={this.onShowTop}><a href="#"><i className="iconfont">&#xe664;</i>Tops</a></li>
+                    <li role="presentation" className={this.state.showNew? "active": ""} onClick={this.onShowNew}><a href="#"><i className="iconfont">&#xe63e;</i>Newest</a></li>
                 </ul>
                 <div className="stories">
                     {stories}

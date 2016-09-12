@@ -19940,6 +19940,11 @@ var AppBody = React.createClass({
                     React.createElement(
                         'a',
                         { href: '#' },
+                        React.createElement(
+                            'i',
+                            { className: 'iconfont' },
+                            ''
+                        ),
                         'Tops'
                     )
                 ),
@@ -19949,6 +19954,11 @@ var AppBody = React.createClass({
                     React.createElement(
                         'a',
                         { href: '#' },
+                        React.createElement(
+                            'i',
+                            { className: 'iconfont' },
+                            ''
+                        ),
                         'Newest'
                     )
                 )
@@ -20079,14 +20089,15 @@ var Story = React.createClass({
             deleted: story.deleted,
             time: story.time,
             score: story.score,
-            comments: story.kids
+            comments: story.kids,
+            read: false
         };
     },
     render: function render() {
         var datetime = new Date(this.state.time * 1000);
         return React.createElement(
             'div',
-            { className: 'card' },
+            { className: 'card p-l-1 p-r-1' },
             React.createElement(
                 'h6',
                 { className: this.state.deleted ? "item-title deleted" : "item-title" },
@@ -20122,7 +20133,12 @@ var Story = React.createClass({
                 React.createElement(
                     'a',
                     { href: "https://new.ycombinator.com/item?id=" + this.state.id },
-                    'Join'
+                    React.createElement(
+                        'i',
+                        { className: 'iconfont' },
+                        ''
+                    ),
+                    ' Join discusssion'
                 )
             )
         );

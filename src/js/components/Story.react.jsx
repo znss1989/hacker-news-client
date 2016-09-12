@@ -15,13 +15,14 @@ var Story = React.createClass({
             deleted: story.deleted,
             time: story.time,
             score: story.score,
-            comments: story.kids
+            comments: story.kids,
+            read: false
         };
     },
     render: function() {
         var datetime = new Date(this.state.time * 1000);
         return (
-            <div className="card">
+            <div className="card p-l-1 p-r-1">
                 <h6 className={this.state.deleted? "item-title deleted": "item-title"}>
                     {this.state.title + " "}
                     <a href={this.state.url}>
@@ -32,7 +33,7 @@ var Story = React.createClass({
                     by <a href={"https://news.ycombinator.com/user?id=" + this.state.by}>{this.state.by}</a>
                     , at {datetime.toLocaleDateString() + " " + datetime.toLocaleTimeString()}
                 </p>
-                <p>{this.state.comments? this.state.comments.length: 0} comments | <a href={"https://new.ycombinator.com/item?id=" + this.state.id}>Join</a></p>
+                <p>{this.state.comments? this.state.comments.length: 0} comments | <a href={"https://new.ycombinator.com/item?id=" + this.state.id}><i className="iconfont">&#xe612;</i> Join discusssion</a></p>
             </div>
         );
     }
